@@ -31,7 +31,6 @@ jobs:
         
   unitTests:
      name: Unit Tests
-     if: ${{ false }}
      runs-on: ubuntu-latest
      needs: build
      # https://hub.docker.com/r/fabernovel/android/tags
@@ -54,7 +53,6 @@ jobs:
        
   integrationTests:
      name: Integration Tests
-     if: ${{ false }}
      runs-on: ubuntu-latest
      needs: build
      # https://hub.docker.com/r/fabernovel/android/tags
@@ -74,34 +72,6 @@ jobs:
           ${{ runner.os }}-gradle-
      - name: Gradle build
        run: ./gradlew compileDebugUnitTestSources        
-  
-  code-scan:
-    runs-on: ubuntu-latest
-    needs: build
-    
-    steps:
-      - name: Setup CodeQL
-        uses: github/codeql-action/setup@v2
-      - name: Build and Analyze
-        run: |
-          codeql database create --language=kotlin --source-root=. MyDB
-          codeql analyze --database=MyDB --format=sarif-latest --output=results.sarif
-           
-  secureCodeScanning:
-    name: NowSecure
-    runs-on: ubuntu-latest
-    needs: code-scan
-    steps:
-      - name: Run NowSecure
-        uses: nowsecure/nowsecure-action@3b439db31b6dce857b09f5222fd13ffc3159ad26
-        with:
-          token: ${{ secrets.NS_TOKEN }}
-          app_file: app/build/outputs/apk/debug/app-debug.apk                 # Update this to a path to your .ipa or .apk
-          group_id: com.example.testapplication                 # Update this to your desired Platform group ID
 
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: NowSecure.sarif
   
   
