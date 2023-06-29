@@ -1,4 +1,4 @@
-name: Android CI
+name: Main Branch Pipeline
 
 on:
   push:
@@ -90,7 +90,23 @@ jobs:
         run: |
           codeql database create --language=kotlin --source-root=. MyDB
           codeql analyze --database=MyDB --format=sarif-latest --output=results.sarif
-    
+          
+  secureCodeScanning:
+    name: NowSecure
+    runs-on: ubuntu-latest
+    needs: code-scan
+    steps:
+      - name: Run NowSecure
+        uses: nowsecure/nowsecure-action@3b439db31b6dce857b09f5222fd13ffc3159ad26
+        with:
+          token: ${{ secrets.NS_TOKEN }}
+          app_file: app/build/outputs/apk/debug/app-debug.apk                 # Update this to a path to your .ipa or .apk
+          group_id: com.example.testapplication                 # Update this to your desired Platform group ID
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: NowSecure.sarif    
     
   upload-and-sign:
       runs-on: ubuntu-latest
