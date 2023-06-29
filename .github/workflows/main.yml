@@ -10,8 +10,9 @@ jobs:
   build:
 
     runs-on: [ self-hosted ]
+    # https://hub.docker.com/r/fabernovel/android/tags
     container:
-      image: docker://fabernovel/android:api-33
+      image: docker://fabernovel/android:api-33-gcloud-ndk-v1.7.0
 
     steps:
     - name: checkout
