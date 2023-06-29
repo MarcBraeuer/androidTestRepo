@@ -1,4 +1,4 @@
-name: "Android Feature Branch Pipeline"
+name: "Feature Branch Pipeline"
 
 on:
   push:
