@@ -27,3 +27,8 @@ jobs:
           ${{ runner.os }}-gradle-
     - name: Gradle build
       run: ./gradlew assembleDebug
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-app-apk
+        path: app/build/outputs/apk/release/app-debug.apk
