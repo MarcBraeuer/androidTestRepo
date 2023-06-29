@@ -28,11 +28,6 @@ jobs:
           ${{ runner.os }}-gradle-
     - name: Gradle build
       run: ./gradlew assembleDebug
-    - name: Upload APK Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: my-app-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
         
   unitTests:
      name: Unit Tests
@@ -77,11 +72,25 @@ jobs:
           ${{ runner.os }}-gradle-
      - name: Gradle build
        run: ./gradlew compileDebugUnitTestSources        
-       
+  
+  code-scan:
+    runs-on: ubuntu-latest
+    needs: [unitTests, integrationTests]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup CodeQL
+        uses: github/codeql-action/setup@v2
+      - name: Build and Analyze
+        run: |
+          codeql database create --language=kotlin --source-root=. MyDB
+          codeql analyze --database=MyDB --format=sarif-latest --output=results.sarif
+           
   secureCodeScanning:
     name: NowSecure
     runs-on: ubuntu-latest
-    needs: unitTests
+    needs: code-scan
     steps:
       - name: Run NowSecure
         uses: nowsecure/nowsecure-action@3b439db31b6dce857b09f5222fd13ffc3159ad26
