@@ -16,15 +16,6 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v3
-    - name: check docker running
-      run: docker --help
-    - name: Ruby Setup
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-      env:
-        ImageOS: ubuntu20
-
     - name: Gradle cache
       uses: actions/cache@v3
       with:
