@@ -11,12 +11,14 @@ jobs:
 
     runs-on: [ self-hosted ]
     # https://hub.docker.com/r/fabernovel/android/tags
-    container:
-      image: docker://fabernovel/android:api-33-gcloud-ndk-v1.7.0
+#    container:
+ #     image: docker://fabernovel/android:api-33-gcloud-ndk-v1.7.0
 
     steps:
     - name: checkout
       uses: actions/checkout@v3
+    - name: check docker running
+      run: sudo docker -d -D
     - name: Ruby Setup
       uses: ruby/setup-ruby@v1
       with:
