@@ -35,6 +35,7 @@ jobs:
 
   test-short: 
      runs-on: ubuntu-latest
+     needs: build
      # https://hub.docker.com/r/fabernovel/android/tags
      container: fabernovel/android:api-33-gcloud-ndk-v1.7.0
 
