@@ -31,7 +31,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: my-app-apk
-        path: app/build/outputs/apk/release/app-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
 
   test-short: 
      runs-on: ubuntu-latest
@@ -77,10 +77,25 @@ jobs:
      - name: Gradle build
        run: ./gradlew compileDebugUnitTestSources       
 
+  code-scan:
+    runs-on: ubuntu-latest
+    needs: test-short
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup CodeQL
+        uses: github/codeql-action/setup@v2
+      - name: Build and Analyze
+        run: |
+          codeql database create --language=kotlin --source-root=. MyDB
+          codeql analyze --database=MyDB --format=sarif-latest --output=results.sarif
+    
+    
   upload-and-sign:
       runs-on: ubuntu-latest
       environment: release
-      needs: test-short
+      needs: code-scan
 
       steps:
       - name: prepareUpload
