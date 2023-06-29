@@ -32,3 +32,30 @@ jobs:
       with:
         name: my-app-apk
         path: app/build/outputs/apk/release/app-debug.apk
+
+  test-short: 
+     runs-on: ubuntu-latest
+     # https://hub.docker.com/r/fabernovel/android/tags
+     container: fabernovel/android:api-33-gcloud-ndk-v1.7.0
+
+     steps:
+     - name: checkout
+       uses: actions/checkout@v3
+     - name: Gradle cache
+       uses: actions/cache@v3
+       with:
+         path: |
+          /root/.gradle/caches
+          /root/.gradle/wrapper
+         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+         restore-keys: |
+          ${{ runner.os }}-gradle-
+     - name: Gradle build
+       run: ./gradlew compileDebugUnitTestSources
+       
+  test-long: 
+      runs-on: ubuntu-latest
+      container: fabernovel/android:api-33-gcloud-ndk-v1.7.0
+      # emulator setup to test
+
+  
