@@ -18,7 +18,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v3
     - name: check docker running
-      run: sudo docker -d -D
+      run: docker -d -D
     - name: Ruby Setup
       uses: ruby/setup-ruby@v1
       with:
