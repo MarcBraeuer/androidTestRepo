@@ -52,10 +52,5 @@ jobs:
           ${{ runner.os }}-gradle-
      - name: Gradle build
        run: ./gradlew compileDebugUnitTestSources
-       
-  test-long: 
-      runs-on: ubuntu-latest
-      container: fabernovel/android:api-33-gcloud-ndk-v1.7.0
-      # emulator setup to test
 
   
