@@ -54,7 +54,7 @@ jobs:
   createPR:
     name: Create a PullRequest       
     needs: unitTests
-    uses: peter-evans/create-pull-request@v5.0.2
+    uses: .github/workflows/peter-evans/create-pull-request@v5.0.2
     with:
       # GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)
       token: ${{ github.token }}
