@@ -50,18 +50,7 @@ jobs:
           ${{ runner.os }}-gradle-
      - name: Gradle build
        run: ./gradlew compileDebugUnitTestSources    
-
-  createPR:
-    name: Create a PullRequest       
-    needs: unitTests
-    uses: .github/workflows/peter-evans/create-pull-request@v5.0.2
-    with:
-      # GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)
-      token: ${{ github.token }}
-      author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-      delete-branch: true
-      base: main
-
+       
     
   integrationTests:
      name: Integration Tests
@@ -84,9 +73,18 @@ jobs:
           ${{ runner.os }}-gradle-
      - name: Gradle build
        run: ./gradlew compileDebugUnitTestSources        
+  
+  createPR:
+     name: Create Pull Request
+     runs-on: ubuntu-latest
+     environment: pr
+     needs: unitTests
+
+     steps:
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5.0.2
+        with:
+          token: ${{ github.token }}
+          author:  ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
 
 
-    
-    
-  
-  
